@@ -8,16 +8,19 @@ from dataset.semantic_dataset import all_file_prefixes
 
 
 def wc(file_name):
-    '''
+    #'''
     out = subprocess.Popen(
         ["wc", "-l", file_name], stdout=subprocess.PIPE, stderr=subprocess.STDOUT
     ).communicate()[0]
     return int(out.partition(b" ")[0])
+    #'''
     '''
     out = subprocess.Popen(
         ["find","/c","/v","",file_name],shell=True,stdout=subprocess.PIPE, stderr=subprocess.STDOUT
     ).communicate()[0]
     return int(out.partition(b" ")[2].split()[-1])
+    '''
+    
     
 
 
@@ -91,7 +94,7 @@ if __name__ == "__main__":
     las_path = '20230816113404_Merged_Data-clip.las'
 
     txt_path = os.path.join(raw_dir,las_path.replace('las','txt'))
-    point_cloud_las_to_txt(las_path,txt_path)
+    #point_cloud_las_to_txt(las_path,txt_path)
     all_file_prefixes = [las_path.split('.')[0]]
 
     for file_prefix in all_file_prefixes:

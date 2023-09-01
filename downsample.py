@@ -88,7 +88,6 @@ if __name__ == "__main__":
 
     # Create downsampled_dir
     os.makedirs(downsampled_dir, exist_ok=True)
-    
     all_file_prefixes = ['20230816113404_Merged_Data-clip']
 
     for file_prefix in all_file_prefixes:
