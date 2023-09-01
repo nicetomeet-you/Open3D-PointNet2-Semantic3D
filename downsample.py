@@ -18,7 +18,7 @@ def down_sample(
         print("Processing:", file_prefix)
 
     # Inputs
-    dense_pcd = open3d.read_point_cloud(dense_pcd_path)
+    dense_pcd = open3d.io.read_point_cloud(dense_pcd_path)
     try:
         dense_labels = load_labels(dense_label_path)
     except:
@@ -46,12 +46,20 @@ def down_sample(
     min_bound = dense_pcd.get_min_bound() - voxel_size * 0.5
     max_bound = dense_pcd.get_max_bound() + voxel_size * 0.5
 
-    sparse_pcd, cubics_ids = open3d.voxel_down_sample_and_trace(
+    ## FLAG
+    point_net = open3d.geometry.PointCloud(dense_pcd)
+    sparse_pcd,_, cubics_ids = point_net.voxel_down_sample_and_trace(
+        voxel_size, min_bound, max_bound, False
+    )
+    '''
+    sparse_pcd, cubics_ids = open3d.geometry.PointCloud.voxel_down_sample_and_trace(
         dense_pcd, voxel_size, min_bound, max_bound, False
     )
-    print("Num points after down sampling:", np.asarray(sparse_pcd.points).shape[0])
+    '''
+    ##
 
-    open3d.write_point_cloud(sparse_pcd_path, sparse_pcd)
+    print("Num points after down sampling:", np.asarray(sparse_pcd.points).shape[0])
+    open3d.io.write_point_cloud(sparse_pcd_path, sparse_pcd)
     print("Point cloud written to:", sparse_pcd_path)
 
     # Downsample labels
@@ -80,6 +88,8 @@ if __name__ == "__main__":
 
     # Create downsampled_dir
     os.makedirs(downsampled_dir, exist_ok=True)
+    
+    all_file_prefixes = ['20230816113404_Merged_Data-clip']
 
     for file_prefix in all_file_prefixes:
         # Paths
